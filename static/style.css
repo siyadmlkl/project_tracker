@@ -1,0 +1,28 @@
+body{
+    background: rgb(0,8,10);
+    background: linear-gradient(229deg, rgba(0,8,10,1) 0%, rgba(22,71,73,1) 100%);
+    color: white;
+}
+.heading{
+    background-color: brown;
+    padding: 10px;
+    
+}
+.notes{
+    color: black;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 5px;
+    box-shadow: 2px 2px 0px darkgray;
+    width: 280px;
+    padding: 3px;
+    float:left;
+}
+
+.entrybox{
+    padding: 5%;
+    width: 60%;
+    margin: auto;
+    color: black;
+    background: rgb(170,199,206);
+    background: linear-gradient(229deg, rgba(170,199,206,1) 0%, rgba(140,195,195,1) 100%);
+}

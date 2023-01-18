@@ -1,0 +1,20 @@
+{% extends 'base.html' %} {% block content %} {% include 'navbar.html' %}
+<div class="container col-5">
+  <h4>Contractors</h4>
+  <table class="table table-light">
+    <tr>
+      <th>Name</th>
+      <th>Call Off Contract</th>
+      <th>Color Tag</th>
+    </tr>
+    {% for i in contractors %}
+    <tr>
+      <td>{{i['name']}}</td>
+      <td>{{i['coc']}}</td>
+      <td>{{i['color']}}</td>
+  
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock %}

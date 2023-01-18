@@ -1,0 +1,39 @@
+{% extends 'base.html' %} {% block content %} {% include 'navbar.html' %}
+
+<div style="text-align: center; display: inline-block;">
+  <h4>Ongoing Works</h4>
+  {% for i in works %}
+  <div class="notes" style="background-color: {{i.color}};">
+    <span><strong>{{i.name}}</strong></span
+    ><br />
+    <span>Location - {{i.location}}</span><br />
+    <span>Start - {{i.start_date}}</span><br />
+    <span>Est. Completion - {{i.comp_date}}</span><br />
+    <span>Job No. - {{i.job_no}}</span><br>
+    {% if i.status=="ongoing" %}
+    {% if today > i.comp_date | replace("-","") | int %}
+    <span class="badge bg-danger">Delayed</span>
+    {% else %}
+    <span class="badge bg-success">On Time</span>
+    {% endif %}
+    {% endif %}
+    {% if i.status=="completed" or i.status=="completed" %}
+    <span href="#" class="badge bg-success">{{i.status}}</span><br>
+    {% else %}
+    <span href="#" class="badge bg-secondary">{{i.status}}</span><br>
+    {% endif %}
+    <div>
+      {% set start = i.start_date | replace("-","") | int %}
+      {% set finish = i.comp_date | replace("-","") | int %}
+      {% set days = finish - start %}
+      {% set elapsed = today-start %}
+      {% if days <= elapsed %}
+      {% set elapsed = days %}
+      {% endif %}
+      <progress value="{{elapsed/days*100}}" max="100" style="width:250px;"></progress>
+    </div>
+  </div>
+  {% endfor %} 
+
+</div>
+{% endblock %}

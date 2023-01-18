@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% block content %} {% include 'navbar.html' %}
+<br />
+<div>
+  <div class="entrybox">
+    <h5>Add a Project</h5>
+    <form method="POST" class="form-floating">
+      <div class="form-floating mb-2">
+        <select
+          name="name"
+          class="form-select"
+          aria-label="Default select example"
+        >
+          <option disabled selected>..Select Contractor..</option>
+          {% for contractor in contractors %}
+          <option value="{{contractor[0]}}">{{contractor[1]}}</option>
+          {% endfor %}
+        </select>
+        <label for="name" class="form-label">Name of Contractor</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input
+          type="text"
+          class="form-control"
+          name="location"
+          value="{{location}}"
+        />
+        <label for="location">Location</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input
+          type="number"
+          class="form-control"
+          name="job_no"
+          value="{{job_no}}"
+        />
+        <label for="job_no" class="form-label">Job Number</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input
+          type="date"
+          class="form-control"
+          name="start_date"
+          value="{{start_date}}"
+        />
+        <label for="start_date" class="form-label">Start Date</label>
+      </div>
+      <div class="form-floating mb-2">
+        <input
+          type="date"
+          class="form-control"
+          name="comp_date"
+          value="{{comp_date}}"
+        />
+        <label for="comp_date" class="form-label">Est. Completion Date</label>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
