@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, flash, redirect
+import os
 import sqlite3
 import datetime
 
 app = Flask(__name__)
-app.config['SECRET_KEY']='98356k3j4tbh9sr8fyu&%o3j4rpf9#8sf2ohlo532'
 
 conn = sqlite3.connect('data.db',check_same_thread=False)
 conn.row_factory=sqlite3.Row
@@ -61,6 +61,5 @@ def addProject():
     return render_template('addproject.html',**context)
 
 
-if __name__=='__main__':
-    app.run(debug=True)
+app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
 
