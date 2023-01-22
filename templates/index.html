@@ -1,6 +1,7 @@
-{% extends 'base.html' %} {% block content %} {% include 'navbar.html' %}
-
-<div style="text-align: center; display: inline-block;">
+{% extends 'base.html' %} {% block content %}
+<br>
+<div class="card col-10" style="margin:auto;">
+  <div style="padding: 2rem;">
   <h4>Ongoing Works</h4>
   {% for i in works %}
   <div class="notes" style="background-color: {{i.color}};">
@@ -10,7 +11,7 @@
     <span>Start - {{i.start_date}}</span><br />
     <span>Est. Completion - {{i.comp_date}}</span><br />
     <span>Job No. - {{i.job_no}}</span><br>
-    {% if i.status=="ongoing" %}
+    {% if i.status=="Ongoing" %}
     {% if today > i.comp_date | replace("-","") | int %}
     <span class="badge bg-danger">Delayed</span>
     {% else %}
@@ -32,6 +33,7 @@
       {% endif %}
       <progress value="{{elapsed/days*100}}" max="100" style="width:250px;"></progress>
     </div>
+  
   </div>
   {% endfor %} 
 

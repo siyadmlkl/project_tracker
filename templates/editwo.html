@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+<br>
+<div class="card col-10" style="margin:auto;">
+  <div style="padding: 3rem;">
+    <h3>Edit Project</h3>
+    <h6>Contractor - {{works[0].name}}</h6>
+    <h6>Location   - {{works[0].location}}</h6>
+    <h6>Job Number - {{works[0].job_no}}</h6>
+    <form method="POST" class="form-floating">
+      <div class="form-floating mb-2">
+        <select
+          name="status"
+          class="form-select"
+          aria-label="Default select example"
+        >
+          <option disabled selected>{{works[0].status}} (..change status if required)</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Completed">Completed</option>
+          <option value="Documentation">Documentation</option>
+          <option value="Closed">Closed</option>
+        </select>
+        <label for="status" class="form-label">Project Status</label>
+      </div>
+      
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
