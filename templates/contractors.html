@@ -1,20 +1,41 @@
 {% extends 'base.html' %} {% block content %}
-<div class="container col-5">
-  <h4>Contractors</h4>
-  <table class="table table-light">
-    <tr>
-      <th>Name</th>
-      <th>Call Off Contract</th>
-      <th>Color Tag</th>
-    </tr>
-    {% for i in contractors %}
-    <tr>
-      <td>{{i['name']}}</td>
-      <td>{{i['coc']}}</td>
-      <td>{{i['color']}}</td>
-  
-    </tr>
-    {% endfor %}
-  </table>
+<div class="container" style="width: 400px;">  
+  <div class="card" style="padding: 2rem; margin: 1rem;">
+    <h4>Add Contractor</h4>
+    <form class="form-floating" method="POST">
+      <div class="form-floating">
+        <input type="text" class="form-control" name="name" />
+        <label for="name" class="form-label">Name of Contractor</label><br />
+      </div>
+      <div class="form-floating">
+        <input type="text" class="form-control" name="color" />
+        <label for="name" class="form-check-label">Color</label>
+      </div>
+      <div class="form">
+        <input type="checkbox" class="form-check-input" name="coc" />
+        <label for="coc" class="form-label">Call-Off Contract</label><br />
+      </div>
+      
+      <button type="submit" class="btn btn-sm btn-primary">Add</button>
+    
+    </form>
+  </div>
+  <div class="card" style="padding: 2rem">
+    <h4>Contractors</h4>
+    <table class="table table-light">
+      <tr>
+        <th>Name</th>
+        <th>Call Off Contract</th>
+        <th>Color Tag</th>
+      </tr>
+      {% for i in contractors %}
+      <tr>
+        <td>{{i['name']}}</td>
+        <td>{{i['coc']}}</td>
+        <td>{{i['color']}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
 </div>
 {% endblock %}

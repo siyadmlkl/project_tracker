@@ -1,34 +1,36 @@
 from flask import Flask, render_template, request, redirect
 import os
-import sqlite3
+import sqlite3 as sqlt
 import datetime
 
 app = Flask(__name__)
-
-conn = sqlite3.connect('data.db', check_same_thread=False)
-conn.row_factory = sqlite3.Row
 
 
 def fetch_all_contractors():
     '''
     function used to fetch all contractors
     '''
-    cur = conn.cursor()
-    contractors = cur.execute("SELECT * FROM contractors").fetchall()
-    return contractors
+
+    with sqlt.connect('data.db') as conn:
+        conn.row_factory = sqlt.Row
+        cur = conn.cursor()
+        contractors = cur.execute("SELECT * FROM contractors").fetchall()
+        return contractors
 
 def fetch_all_works():
     '''
     Function used to fetch list of contractors and details
     '''
-    cur = conn.cursor()
-    works = cur.execute("SELECT contractor, location, \
-                        comp_date,job_no, name, color, status,\
-                        start_date FROM works \
-                        INNER JOIN contractors on \
-                        contractors.id=works.contractor\
-                        WHERE status!='closed' ORDER BY contractor").fetchall()
-    return works
+    with sqlt.connect('data.db') as conn:
+        conn.row_factory = sqlt.Row
+        cur=conn.cursor()
+        works = cur.execute("SELECT contractor, location, \
+                            comp_date,job_no, name, color, status,\
+                            start_date FROM works \
+                            INNER JOIN contractors on \
+                            contractors.id=works.contractor\
+                            WHERE status!='closed' ORDER BY contractor").fetchall()
+        return works
 
 def fetch_a_work(job,number):
     '''
@@ -40,9 +42,10 @@ def fetch_a_work(job,number):
                         INNER JOIN contractors on \
                         contractors.id=works.contractor \
                             WHERE {job}='{number}'"
-    cur = conn.cursor()
-    print(query)
-    works = cur.execute(query).fetchall()
+    with sqlt.connect('data.db') as conn:
+        conn.row_factory = sqlt.Row
+        cur = conn.cursor()
+        works = cur.execute(query).fetchall()
     return works
 
 
@@ -58,11 +61,32 @@ def home():
     return render_template('index.html', **context)
 
 
-@app.route("/contractors")
+@app.route("/contractors", methods=('GET','POST'))
 def contractor():
     '''
     view for contractors page
     '''
+    if request.method=='POST':
+        name_ = request.form['name']
+        color = request.form['color']
+        coc=''
+        if 'coc' in request.form:
+            coc="Yes"
+        else:
+            coc = "No"
+
+        with sqlt.connect('data.db') as conn:
+            conn.row_factory = sqlt.Row
+            cur = conn.cursor()
+            query = f"INSERT INTO contractors(name,color,coc) VALUES('{name_}','{color}',{coc})"
+            cur.execute(query)
+            conn.commit()
+
+        contractors = fetch_all_contractors()
+        context = {"contractors": contractors}
+        return render_template('contractors.html', **context)
+
+
     contractors = fetch_all_contractors()
     context = {"contractors": contractors}
     return render_template('contractors.html', **context)
@@ -80,13 +104,15 @@ def add_project():
         start_date = request.form['start_date']
         comp_date = request.form['comp_date']
 
-        cur = conn.cursor()
-        cur.execute('INSERT INTO works(contractor,location,job_no,start_date,comp_date, status)\
-                VALUES(?,?,?,?,?,?)', (_contractor, location,
-                    job_no, start_date, comp_date, "Ongoing"))
-        conn.commit()
+        with sqlt.connect('data.db') as conn:
+            conn.row_factory = sqlt.Row
+            cur = conn.cursor()
+            cur.execute('INSERT INTO works(contractor,location,job_no,start_date,comp_date, status)\
+                    VALUES(?,?,?,?,?,?)', (_contractor, location,
+                        job_no, start_date, comp_date, "Ongoing"))
+            conn.commit()
+            return redirect('/')
 
-        return redirect('/')
     contractors = fetch_all_contractors()
     context = {"contractors": contractors}
     return render_template('addproject.html', **context)
@@ -100,11 +126,12 @@ def edit_project():
     job_no = str(request.args.get('job'))
     if request.method=='POST':
         status = request.form['status']
-        cur = conn.cursor()
-        query = f"UPDATE works SET status='{status}' WHERE job_no='{job_no}'"
-        print(query)
-        cur.execute(query)
-        conn.commit()
+        with sqlt.connect('data.db') as conn:
+            conn.row_factory = sqlt.Row
+            cur = conn.cursor()
+            query = f"UPDATE works SET status='{status}' WHERE job_no='{job_no}'"
+            cur.execute(query)
+            conn.commit()
         return redirect('/')
 
     works = fetch_a_work("job_no",job_no)
@@ -116,6 +143,10 @@ def edit_project():
                "today": today}
 
     return render_template('editwo.html',**context)
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 if __name__ == "__main__":
