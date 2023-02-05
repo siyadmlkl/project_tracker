@@ -117,6 +117,20 @@ def add_project():
     context = {"contractors": contractors}
     return render_template('addproject.html', **context)
 
+@app.route("/delete")
+def delete_project():
+    '''
+    delete project entry
+    '''
+    job_no = str(request.args.get('job'))
+    with sqlt.connect('data.db') as conn:
+        conn.row_factory = sqlt.Row
+        cur = conn.cursor()
+        query = f"DELETE FROM works WHERE job_no='{job_no}';"
+        cur.execute(query)
+        conn.commit()
+        return redirect('/')
+
 
 @app.route("/edit", methods=('GET', 'POST'))
 def edit_project():
@@ -146,6 +160,9 @@ def edit_project():
 
 @app.route('/about')
 def about():
+    '''
+    About
+    '''
     return render_template('about.html')
 
 
